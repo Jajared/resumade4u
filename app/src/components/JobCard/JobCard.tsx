@@ -3,18 +3,14 @@ import { Card, Image, Text, Group, Badge, Button, ActionIcon } from "@mantine/co
 import classes from "./JobCard.module.css";
 import { JobData } from "@/data/types";
 import Link from "next/link";
-import fetchImageUrl from "@/functions/firebase/fetchImageUrl";
-import { useEffect, useState } from "react";
-import { JobTag, jobTagMapping } from "@/data/constants";
 
 export function JobCard({ data }: { data: JobData }) {
-  const { "Company Name": company, "Job Title": title, Location: location, "Website URL": url } = data;
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const { "Company Name": company, "Job Title": title, Location: location, "Website URL": url, "Image URL": imageUrl } = data;
 
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
-      <Card.Section className="h-2/3 items-center justify-center p-5">
-        <Image src={imageUrl} alt={title} height={180} className="object-cover" />
+      <Card.Section className="items-center justify-center p-5">
+        <Image src={imageUrl} alt={title} />
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">

@@ -6,6 +6,7 @@ import classes from "./FileDrop.module.css";
 import parseFile from "@/functions/parseFile";
 import convertPDF from "@/functions/convertPDF";
 import generateTags from "@/functions/generateTag";
+import { Loader } from "@mantine/core";
 
 function readFileAsArrayBuffer(file: any) {
   return new Promise((resolve, reject) => {
@@ -18,18 +19,17 @@ function readFileAsArrayBuffer(file: any) {
   });
 }
 
-export function FileDrop({ setApiResponse }: { setApiResponse: (apiResponse: string) => void }) {
+export function FileDrop({ setApiResponse, loading, setLoading }: { setApiResponse: (apiResponse: string) => void; loading: boolean; setLoading: (loading: boolean) => void }) {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
-  const [isLoading, setIsLoading] = useState(false);
   return (
     <div className={classes.wrapper}>
       <Dropzone
-        loading={isLoading}
+        loading={loading}
         openRef={openRef}
         onDrop={async (file) => {
           try {
-            setIsLoading(true);
+            setLoading(true);
             let result;
 
             if (file[0].type === MIME_TYPES.pdf) {
@@ -45,7 +45,7 @@ export function FileDrop({ setApiResponse }: { setApiResponse: (apiResponse: str
           } catch (error) {
             console.error(error);
           } finally {
-            setIsLoading(false);
+            setLoading(false);
           }
         }}
         className={classes.dropzone}
@@ -56,30 +56,26 @@ export function FileDrop({ setApiResponse }: { setApiResponse: (apiResponse: str
         <div style={{ pointerEvents: "none" }}>
           <Group justify="center">
             <Dropzone.Accept>
-              <IconDownload style={{ width: rem(50), height: rem(50) }} color={theme.colors.blue[6]} stroke={1.5} />
+              <IconDownload style={{ width: rem(50), height: rem(50) }} color={theme.colors.green[6]} stroke={1.5} />
             </Dropzone.Accept>
             <Dropzone.Reject>
               <IconX style={{ width: rem(50), height: rem(50) }} color={theme.colors.red[6]} stroke={1.5} />
             </Dropzone.Reject>
             <Dropzone.Idle>
-              <IconCloudUpload style={{ width: rem(50), height: rem(50) }} stroke={1.5} />
+              <IconCloudUpload style={{ width: rem(50), height: rem(50) }} color={theme.colors.grape[6]} stroke={1.5} />
             </Dropzone.Idle>
           </Group>
 
-          <Text ta="center" fw={700} fz="lg" mt="xl">
+          <Text ta="center" fw={700} fz="lg" mt="xl" variant="gradient" gradient={{ from: "grape", to: "cyan", deg: 90 }}>
             <Dropzone.Accept>Drop files here</Dropzone.Accept>
             <Dropzone.Reject>Pdf file less than 30mb</Dropzone.Reject>
             <Dropzone.Idle>Upload resume</Dropzone.Idle>
           </Text>
-          <Text ta="center" fz="sm" mt="xs" c="dimmed">
+          <Text ta="center" size="lg" fz="sm" mt="xs" c="white">
             Drag&apos;n&apos;drop files here to upload. We can accept only <i>.pdf</i> files that are less than 30mb in size.
           </Text>
         </div>
       </Dropzone>
-
-      <Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current?.()}>
-        Select files
-      </Button>
     </div>
   );
 }

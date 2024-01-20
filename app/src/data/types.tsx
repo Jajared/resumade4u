@@ -3,4 +3,5 @@ export interface JobData {
   "Job Title": string;
   Location: string;
   "Website URL": string;
+  "Image URL": string;
 }
