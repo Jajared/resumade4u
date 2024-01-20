@@ -8,33 +8,8 @@ import { useEffect, useState } from "react";
 import { JobTag, jobTagMapping } from "@/data/constants";
 
 export function JobCard({ data }: { data: JobData }) {
-  const { title, company, description, tags } = data;
+  const { "Company Name": company, "Job Title": title, Location: location, "Website URL": url } = data;
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  function renderTags(tags: string[]) {
-    return tags.map((tag) => {
-      const color = jobTagMapping[tag as JobTag] || "defaultColor"; // Fallback color
-      return (
-        <Badge variant="light" key={tag} color={color}>
-          {tag}
-        </Badge>
-      );
-    });
-  }
-
-  useEffect(() => {
-    const loadImage = async () => {
-      try {
-        const url = await fetchImageUrl(data.id);
-        if (url) {
-          setImageUrl(url);
-        }
-      } catch (error) {
-        console.error("Error fetching image:", error);
-      }
-    };
-    loadImage();
-  });
 
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
@@ -52,7 +27,7 @@ export function JobCard({ data }: { data: JobData }) {
           </Badge>
         </Group>
         <Text fz="sm" mt="xs">
-          {description}
+          {location}
         </Text>
       </Card.Section>
 
@@ -60,13 +35,10 @@ export function JobCard({ data }: { data: JobData }) {
         <Text mt="md" className={classes.label} c="dimmed">
           Skills:
         </Text>
-        <Group gap={7} mt={5}>
-          {renderTags(tags)}
-        </Group>
       </Card.Section>
 
       <Group mt="xs">
-        <Link href={`/job/${data.id}`}>
+        <Link href={`/job/${data["Website URL"]}`}>
           <Button radius="md" style={{ flex: 1, backgroundColor: "grey" }}>
             Show details
           </Button>

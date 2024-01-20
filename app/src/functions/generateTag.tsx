@@ -1,4 +1,4 @@
-import { OpenAI } from "openai";
+import { OpenAI } from "openai/index.mjs";
 
 const supportedTags = ["Software", "Marketing", "Healthcare", "Law", "Finance"];
 const openai = new OpenAI({ apiKey: "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", dangerouslyAllowBrowser: true });
