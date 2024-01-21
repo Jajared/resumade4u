@@ -1,9 +1,9 @@
-import FileDrop from "../components/FileDrop/FileDrop";
+import FileDrop from "@/components/FileDrop/FileDrop";
 import { Transition } from "@headlessui/react";
 import { Loader } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Pagination } from "@mantine/core";
-import { JobCard } from "../components/JobCard/JobCard";
+import { JobCard } from "@/components/JobCard/JobCard";
 import { ActionIcon } from "@mantine/core";
 import { IconHeart } from "@tabler/icons-react";
 import { IoMdArrowBack } from "react-icons/io";
