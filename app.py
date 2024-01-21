@@ -4,7 +4,7 @@ from flask import send_from_directory
 import scraper
 
 
-app = Flask(__name__, static_folder='app/dist', static_url_path='')
+app = Flask(__name__, static_folder='app/.next', static_url_path='')
 
 # enable CORS
 CORS(app)
