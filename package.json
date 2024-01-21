@@ -1,0 +1,9 @@
+{
+  "name": "resumade4u",
+  "scripts": {
+    "build": "cd app && npm install && npm run build"
+  },
+  "engines": {
+    "node": "v18.19.0"
+  }
+}
