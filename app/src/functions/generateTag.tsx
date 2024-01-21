@@ -1,6 +1,8 @@
 import { OpenAI } from "openai/index.mjs";
 
-const openai = new OpenAI({ apiKey: "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", dangerouslyAllowBrowser: true });
+const key = process.env.OPENAI_API_KEY;
+
+const openai = new OpenAI({ apiKey: key, dangerouslyAllowBrowser: true });
 
 export default async function generateTags(text: String) {
   const completion = await openai.chat.completions.create({
