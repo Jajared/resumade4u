@@ -38,7 +38,7 @@ export default function Home() {
 
   const fetchData = async ({ jobTitles }) => {
     try {
-      const fetchPromise = fetch("http://127.0.0.1:8000/generate", {
+      const fetchPromise = fetch("https://resumade4u-d420e536d10a.herokuapp.com/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
