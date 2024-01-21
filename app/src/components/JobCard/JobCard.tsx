@@ -6,11 +6,13 @@ import Link from "next/link";
 
 export function JobCard({ data }: { data: JobData }) {
   const { "Company Name": company, "Job Title": title, Location: location, "Website URL": url, "Image URL": imageUrl } = data;
-
+  const saveToSessionStorage = () => {
+    sessionStorage.setItem("job", JSON.stringify(data));
+  };
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section className="items-center justify-center p-5">
-        <Image src={imageUrl} alt={title} />
+        <Image src={imageUrl} alt={title} style={{ width: 100, height: 100 }} />
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">
@@ -23,24 +25,18 @@ export function JobCard({ data }: { data: JobData }) {
           </Badge>
         </Group>
         <Text fz="sm" mt="xs">
-          {location}
-        </Text>
-      </Card.Section>
-
-      <Card.Section className={classes.section}>
-        <Text mt="md" className={classes.label} c="dimmed">
-          Skills:
+          📍{location}
         </Text>
       </Card.Section>
 
       <Group mt="xs">
-        <Link href={`/job/${data["Website URL"]}`}>
+        <Link href={data["Website URL"]}>
           <Button radius="md" style={{ flex: 1, backgroundColor: "grey" }}>
             Show details
           </Button>
         </Link>
 
-        <ActionIcon variant="default" radius="md" size={36}>
+        <ActionIcon variant="default" radius="md" size={36} onClick={() => saveToSessionStorage()}>
           <IconHeart className={classes.like} stroke={1.5} />
         </ActionIcon>
       </Group>

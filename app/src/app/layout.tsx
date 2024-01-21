@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         {/* Main Content */}
-        <Container style={{ flex: 1 }}>{children}</Container>
+        <Container style={{ maxWidth: "none", marginLeft: 0, marginRight: 0 }}>{children}</Container>
       </div>
     </MantineProvider>
   );

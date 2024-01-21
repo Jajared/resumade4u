@@ -69,10 +69,10 @@ export function FileDrop({ setApiResponse, loading, setLoading }: { setApiRespon
           <Text ta="center" fw={700} fz="lg" mt="xl" variant="gradient" gradient={{ from: "grape", to: "cyan", deg: 90 }}>
             <Dropzone.Accept>Drop files here</Dropzone.Accept>
             <Dropzone.Reject>Pdf file less than 30mb</Dropzone.Reject>
-            <Dropzone.Idle>Upload resume</Dropzone.Idle>
+            <Dropzone.Idle>Upload resume (PDF/Image)</Dropzone.Idle>
           </Text>
           <Text ta="center" size="lg" fz="sm" mt="xs" c="white">
-            Drag&apos;n&apos;drop files here to upload. We can accept only <i>.pdf</i> files that are less than 30mb in size.
+            Drag&apos;n&apos;drop files here to upload. We can accept only images or <i>.pdf</i> files that are less than 30mb in size
           </Text>
         </div>
       </Dropzone>

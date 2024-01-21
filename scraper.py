@@ -58,7 +58,6 @@ class linkedin_scrap:
         return job_title
 
     def job_url(driver):
-
         url = driver.find_elements(
             by=By.XPATH, value='//a[contains(@href, "/jobs/")]')
 
@@ -92,6 +91,17 @@ class linkedin_scrap:
         for j in description:
             return j.text
 
+    def image_url(driver):
+        driver.implicitly_wait(10)
+        image_elements = driver.find_elements(
+            By.XPATH, '//img[contains(@class, "artdeco-entity-image")]')
+        image_elements_list = [image_element.get_attribute(
+            'src') or image_element.get_attribute('data-delayed-url') for image_element in image_elements]
+        image_urls = []
+        for image_element in image_elements_list:
+            image_urls.append(image_element)
+        return image_urls
+
     def data_scrap(driver):
 
         df = pd.DataFrame()
@@ -99,6 +109,7 @@ class linkedin_scrap:
         df['Job Title'] = linkedin_scrap.job_title(driver)
         df['Location'] = linkedin_scrap.company_location(driver)
         df['Website URL'] = linkedin_scrap.job_url(driver)[:len(df)]
+        df['Image URL'] = linkedin_scrap.image_url(driver)[:len(df)]
 
         return df
 
@@ -111,6 +122,7 @@ class linkedin_scrap:
         linkedin_scrap.linkedin_open_scrolldown(driver, user_job_title)
 
         final_df = linkedin_scrap.data_scrap(driver)
+
         driver.quit()
 
         return final_df
