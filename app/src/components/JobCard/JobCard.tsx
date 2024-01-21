@@ -7,8 +7,27 @@ import Link from "next/link";
 export function JobCard({ data }: { data: JobData }) {
   const { "Company Name": company, "Job Title": title, Location: location, "Website URL": url, "Image URL": imageUrl } = data;
   const saveToSessionStorage = () => {
-    sessionStorage.setItem("job", JSON.stringify(data));
+    const stored = sessionStorage.getItem("job");
+    let jobsArray = [];
+
+    if (stored) {
+      try {
+        const parsedData = JSON.parse(stored);
+        if (Array.isArray(parsedData)) {
+          jobsArray = parsedData;
+        }
+      } catch (error) {
+        console.error("Error parsing sessionStorage data:", error);
+        // Handle error or initialize jobsArray as an empty array
+      }
+    }
+
+    if (!jobsArray.some((job) => job["Website URL"] === data["Website URL"])) {
+      // Add the new job data and save it back to sessionStorage
+      sessionStorage.setItem("job", JSON.stringify([...jobsArray, data]));
+    }
   };
+
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section className="items-center justify-center p-5">

@@ -6,6 +6,7 @@ import { Pagination } from "@mantine/core";
 import { JobCard } from "@/components/JobCard/JobCard";
 import { ActionIcon } from "@mantine/core";
 import { IconHeart } from "@tabler/icons-react";
+import { IoMdArrowBack } from "react-icons/io";
 
 export default function Home() {
   const [jobData, setJobData] = useState(null);
@@ -15,11 +16,12 @@ export default function Home() {
   const [apiResponse, setApiResponse] = useState(null);
   const [loading, setLoading] = useState(false);
   const [displayError, setDisplayError] = useState(false);
+  const [displayFavourites, setDisplayFavourites] = useState(false);
+  const [favouriteJobs, setFavouriteJobs] = useState([]);
 
   useEffect(() => {
     if (!apiResponse) return;
     setLoading(true);
-    console.log(apiResponse);
     try {
       fetchData({ jobTitles: [apiResponse] }).then((data) => {
         setJobData(data);
@@ -29,6 +31,10 @@ export default function Home() {
       setDisplayError(true);
     }
   }, [apiResponse]);
+
+  useEffect(() => {
+    getFavouriteJobs();
+  }, [displayFavourites]);
 
   const fetchData = async ({ jobTitles }) => {
     try {
@@ -47,6 +53,17 @@ export default function Home() {
       return response.json();
     } catch (error) {
       console.error("Failed to fetch:", error);
+      setDisplayError(true);
+    }
+  };
+
+  const getFavouriteJobs = () => {
+    try {
+      const storedData = sessionStorage.getItem("job");
+      const result = storedData ? JSON.parse(storedData) : [];
+      setFavouriteJobs(result);
+    } catch (error) {
+      console.error("Error parsing favourite jobs from sessionStorage:", error);
       setDisplayError(true);
     }
   };
@@ -117,19 +134,20 @@ export default function Home() {
       </Transition>
 
       {/* Content Div */}
-      <Transition className="w-1/2 my-16 space-y-4" show={isVisible && !apiResponse} enter="transition-all ease-in-out duration-10000 delay-[400ms]" enterFrom="opacity-0 translate-y-6" enterTo="opacity-100 translate-y-0" leave="transition-all ease-in-out duration-10000" leaveFrom="opacity-100" leaveTo="opacity-0">
+      <Transition className="w-1/2 my-16 space-y-4" show={isVisible && !apiResponse && !displayFavourites} enter="transition-all ease-in-out duration-10000 delay-[400ms]" enterFrom="opacity-0 translate-y-6" enterTo="opacity-100 translate-y-0" leave="transition-all ease-in-out duration-10000" leaveFrom="opacity-100" leaveTo="opacity-0">
         <FileDropContainer />
       </Transition>
 
       {/* Response Div */}
       {jobData && (
-        <Transition className="space-y-4" show={jobData != null} enter="transition-all ease-in-out duration-10000 delay-[400ms]" enterFrom="opacity-0 translate-y-6" enterTo="opacity-100 translate-y-0" leave="transition-all ease-in-out duration-10000" leaveFrom="opacity-100" leaveTo="opacity-0">
+        <Transition className="space-y-4" show={jobData != null && !displayFavourites} enter="transition-all ease-in-out duration-10000 delay-[400ms]" enterFrom="opacity-0 translate-y-6" enterTo="opacity-100 translate-y-0" leave="transition-all ease-in-out duration-10000" leaveFrom="opacity-100" leaveTo="opacity-0">
           <div className="flex flex-col items-center justify-center">
-            <a href="/favourites">
-              <ActionIcon variant="default" radius="md" size={36}>
+            <div className="w-full flex justify-end p-4">
+              <ActionIcon variant="default" radius="md" size={36} onClick={() => setDisplayFavourites(true)}>
                 <IconHeart className="bg-red-400" stroke={1.5} />
               </ActionIcon>
-            </a>
+            </div>
+
             <h1 className="text-4xl text-slate-50 font-bold">These jobs are most suitable for you</h1>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-14 p-4">
               {getCurrentPageData().map((job) => (
@@ -139,6 +157,26 @@ export default function Home() {
               ))}
             </div>
             <Pagination total={Math.ceil(jobData.length / ITEMS_PER_PAGE)} value={currentPage} onChange={setCurrentPage} color="white" />
+          </div>
+        </Transition>
+      )}
+
+      {/* Favourites Div */}
+      {favouriteJobs && (
+        <Transition className="w-full space-y-4" show={displayFavourites} enter="transition-all ease-in-out duration-10000 delay-[400ms]" enterFrom="opacity-0 translate-y-6" enterTo="opacity-100 translate-y-0" leave="transition-all ease-in-out duration-10000" leaveFrom="opacity-100" leaveTo="opacity-0">
+          <div className="flex flex-col items-center justify-center">
+            <div className="w-full flex justify-start p-4">
+              <IoMdArrowBack style={{ color: "white", width: 30 }} onClick={() => setDisplayFavourites(false)} />
+            </div>
+            <h1 className="text-4xl text-slate-50 font-bold">Favourites</h1>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-14 p-4">
+              {favouriteJobs.length > 0 &&
+                favouriteJobs.map((job) => (
+                  <div key={job["Website URL"]}>
+                    <JobCard data={job} />
+                  </div>
+                ))}
+            </div>
           </div>
         </Transition>
       )}
