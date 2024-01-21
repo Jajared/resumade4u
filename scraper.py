@@ -1,8 +1,6 @@
 import time
 import numpy as np
 import pandas as pd
-from streamlit_option_menu import option_menu
-from streamlit_extras.add_vertical_space import add_vertical_space
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import warnings
@@ -11,7 +9,7 @@ warnings.filterwarnings('ignore')
 
 class linkedin_scrap:
 
-    def linkedin_open_scrolldown(driver, job_tags):
+    def linkedin_open(driver, job_tags):
 
         b = []
         for i in job_tags:
@@ -70,19 +68,7 @@ class linkedin_scrap:
 
         return job_url
 
-    def job_title_filter(x, user_job_title):
-        s = [i.lower() for i in user_job_title]
-        suggestion = []
-        for i in s:
-            suggestion.extend(i.split())
-        s = x.split()
-        a = [i.lower() for i in s]
-
-        intersection = list(set(suggestion).intersection(set(a)))
-        return x if len(intersection) > 1 else np.nan
-
     def get_description(driver, link):
-
         driver.get(link)
         time.sleep(3)
         description = driver.find_elements(by=By.CSS_SELECTOR,
@@ -102,7 +88,7 @@ class linkedin_scrap:
             image_urls.append(image_element)
         return image_urls
 
-    def data_scrap(driver):
+    def scrap_data(driver):
 
         df = pd.DataFrame()
         df['Company Name'] = linkedin_scrap.company_name(driver)
@@ -119,9 +105,9 @@ class linkedin_scrap:
         chrome_options.add_argument('--maximize-window')
         driver = webdriver.Chrome(options=chrome_options)
 
-        linkedin_scrap.linkedin_open_scrolldown(driver, user_job_title)
+        linkedin_scrap.linkedin_open(driver, user_job_title)
 
-        final_df = linkedin_scrap.data_scrap(driver)
+        final_df = linkedin_scrap.scrap_data(driver)
 
         driver.quit()
 
