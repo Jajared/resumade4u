@@ -1,6 +1,6 @@
 .card {
-  background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
   height: 100%;
+  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2);
 }
 
 .section {

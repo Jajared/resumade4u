@@ -1,7 +1,6 @@
 .wrapper {
   position: relative;
-  margin-bottom: rem(30px);
-  border: solid 1px black;
+  border: solid 4px white;
   border-radius: 10px;
 }
 
@@ -11,7 +10,7 @@
 }
 
 .icon {
-  color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+  color: white;
 }
 
 .control {
